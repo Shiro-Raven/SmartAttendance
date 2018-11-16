@@ -1,6 +1,6 @@
 // Use defines for easier debugging
 #define smokePin 0
-#define buzzerPin 7
+#define buzzerPin 2
 
 int fireThreshold = 150;
 
@@ -17,5 +17,7 @@ void loop() {
     tone(buzzerPin, 1000);
   } else {
     noTone(buzzerPin);
+    // rest of the system here
+    
   }
 }
