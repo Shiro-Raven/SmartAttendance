@@ -5,7 +5,11 @@
 #include <MFRC522.h>
 #include <SD.h>
 
+// LED door defines
 #define LEDpin 15
+
+// Timer default value
+#define defaultTime 1543622400 // Dec 1 2018 00:00:00 GMT
 
 // SD defines
 #define SDchipSelect 3
@@ -196,6 +200,8 @@ LCD5110 myGLCD(5, 4, 6, 8, 7);
 extern uint8_t SmallFont[];
 
 void setup() {
+  setTime(defaultTime);
+  
   pinMode(buzzerPin, OUTPUT);
 
   pinMode(LEDpin, OUTPUT);
