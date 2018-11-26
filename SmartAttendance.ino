@@ -5,8 +5,10 @@
 #include <MFRC522.h>
 #include <SD.h>
 
-// LED door defines
+// Door defines
 #define LEDpin 15
+#define OpenDoor digitalWrite(LEDpin, HIGH)
+#define CloseDoor digitalWrite(LEDpin, LOW)
 
 // Timer default value
 #define defaultTime 1543622400 // Dec 1 2018 00:00:00 GMT
@@ -236,6 +238,7 @@ void loop() {
   if (analogRead(smokePin) >= fireThreshold | fire) {
     myGLCD.print(F("FIRE!!!"), CENTER, 0);
     fire = true;
+    OpenDoor;
     tone(buzzerPin, 1000);
   } else {
     myGLCD.clrScr();
@@ -278,9 +281,9 @@ void loop() {
     
     manage_attendence();
 
-    digitalWrite(LEDpin, HIGH);
+    OpenDoor;
     delay(2000);
-    digitalWrite(LEDpin, LOW);
+    CloseDoor;
     
     // Halt PICC
     mfrc522.PICC_HaltA();
