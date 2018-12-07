@@ -168,23 +168,12 @@ void get_attendence(time_t session_end_time) {
         logFile.print(student_IDs[i]);
         logFile.print(F(" - "));
         logFile.print(F(" Total Time Spent: "));
-        logFile.println(String(percentage * 100) + "%");
+        logFile.println(String(percentage * 100.0) + "%");
       }
     }
   }
-
   logFile.close();
-  // print outputs
-  //Serial.print(F("Total Session Time: "));
-  //Serial.println(String(total_session_time));
-  //for (byte i = 0; i < max_number_of_students; i++) {
-  //  if (student_IDs[i] != "") {
-  //    Serial.print(F("Student: "));
-  //    Serial.print(student_IDs[i]);
-  //    Serial.print(F(" Total Time Spent: "));
-  //    Serial.println(String(total_time_attended[i]));
-  //  }
-  //}
+  
   // reset variables after session ends
   session_start_time = 0;
   for (byte i = 0; i < max_number_of_students; i++) {
@@ -229,13 +218,14 @@ void setup() {
   myGLCD.InitLCD(62);
   myGLCD.setFont(SmallFont);
 
-  fireThreshold = analogRead(smokePin) + 10;
+  fireThreshold = analogRead(smokePin) + 15;
   
   init_session();
 }
 
 void loop() {
   if (analogRead(smokePin) >= fireThreshold | fire) {
+    myGLCD.clrScr();
     myGLCD.print(F("FIRE!!!"), CENTER, 0);
     fire = true;
     OpenDoor;
@@ -243,6 +233,11 @@ void loop() {
   } else {
     myGLCD.clrScr();
     myGLCD.print("Count: " + String(number_of_students_inside), CENTER, 0);
+
+    if(session_start_time != 0){
+      myGLCD.print(F("Tutorial in"), CENTER, 16);
+      myGLCD.print(F("session"), CENTER, 24);
+    }
 
     // Look for new cards
     if ( ! mfrc522.PICC_IsNewCardPresent()) {
@@ -282,7 +277,7 @@ void loop() {
     manage_attendence();
 
     OpenDoor;
-    delay(2000);
+    delay(1500);
     CloseDoor;
     
     // Halt PICC
@@ -294,7 +289,6 @@ void loop() {
 
 String readCard(byte *buffer) {
     String result = buffer;
-
     return result;
 }
 
